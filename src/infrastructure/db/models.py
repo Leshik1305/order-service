@@ -4,8 +4,10 @@ from decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
 
-from sqlalchemy import Enum, Numeric, DateTime, func, UUID
+from sqlalchemy import Enum, Numeric, DateTime, func, UUID, Integer, CheckConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from src.infrastructure.db import Base
 
 
 class OrderStatusEnum(str, enum.Enum):
@@ -15,10 +17,6 @@ class OrderStatusEnum(str, enum.Enum):
     CANCELLED = "CANCELLED"
 
 
-class Base(DeclarativeBase):
-    pass
-
-
 class OrderORM(Base):
     __tablename__ = "orders"
 
@@ -26,7 +24,7 @@ class OrderORM(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
     item_id: Mapped[UUID] = mapped_column(UUID, nullable=False)
-    quantity: Mapped[int] = mapped_column(gt=0, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[OrderStatusEnum] = mapped_column(
         Enum(OrderStatusEnum), default=OrderStatusEnum.NEW
     )

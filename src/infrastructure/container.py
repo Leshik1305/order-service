@@ -10,7 +10,7 @@ class InfrastructureContainer(containers.DeclarativeContainer):
 
     db = providers.Singleton(
         Database,
-        db_url=config.POSTGRES_CONNECTION_STRING,
+        db_url="postgresql+asyncpg://user:password@localhost:5432/service",
     )
 
     uow = providers.Singleton(

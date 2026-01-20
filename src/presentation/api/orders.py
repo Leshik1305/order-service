@@ -18,4 +18,5 @@ async def create_order(
     uc: CreateOrderAPI = Depends(Provide[Container.application.create_order_in_db]),
 ):
     result = await uc.create(item_id=order.item_id, quantity=order.quantity)
+    print(result)
     return result

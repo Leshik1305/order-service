@@ -3,11 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.dtos.order import OrderDTO
 from src.application.interfaces.repositories import OrdersProtocol
+from src.application.use_cases.create_order_in_db import OrderPersister
 from src.domain.value_objects.order_status import OrderStatusEnum
 from src.infrastructure.db.models import OrderORM
 
 
-class Orders(OrdersProtocol):
+class Orders:
     def __init__(self, session: AsyncSession):
         self.session = session
 

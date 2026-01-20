@@ -1,53 +1,25 @@
-import typing
 from uuid import UUID
 
-from src.application.dtos.order import OrderCreateDTO, OrderDTO
-from src.application.interfaces.http_clients import CreateOrderAPIProtocol
-from src.application.interfaces.uow import UnitOfWork
 from src.application.use_cases.check_available_qty import CheckAvailabilityUseCase
+from src.application.use_cases.create_order_in_db import OrderPersister
+from src.application.use_cases.post_order import PostOrderService
 
 
 class CreateOrderUseCase:
     def __init__(
         self,
-        uow: UnitOfWork,
-        catalog: CreateOrderAPIProtocol,
-        available_qty: CheckAvailabilityUseCase,
+        validator: CheckAvailabilityUseCase,
+        service: PostOrderService,
+        db: OrderPersister,
     ):
-        self.uow = uow
-        self.catalog = catalog
-        self.available_qty = available_qty
+        self.validator = validator
+        self.service = service
+        self.db = db
 
-    async def create_order(self, item_id: UUID, quantity: int):
-        if await self.available_qty(item_id, quantity):
+    async def execute(self, item_id: UUID, quantity: int):
 
-        request_body = {
-            "item_id": str(item_id),
-            "quantity": quantity,
-            "idempotency_key": str(idempotency_key)
-        }
+        item_data = await self.validator.check_available_qty(item_id, quantity)
 
-        external_data = await self.catalog.initialize_remote_order(request_body)
+        response = await self.service.create(item_id, quantity)
 
-
-        async with self.uow:
-            # Проверка на дубликат по ключу идемпотентности перед записью
-            existing = await self.uow.orders.get_by_idempotency_key(idempotency_key)
-            if existing:
-                return existing
-
-            # Создаем доменную модель, используя данные из ответа внешней системы
-            order = Order(
-                user_id=user_id,
-                item_id=item_id,
-                quantity=quantity,
-                idempotency_key=idempotency_key,
-                status=OrderStatus.NEW
-                # Здесь можно добавить поля из external_data, например:
-                # remote_reference=external_data["remote_id"]
-            )
-
-            await self.uow.orders.add(order)
-            await self.uow.commit()
-
-            return order
+        return await self.db.create(response)

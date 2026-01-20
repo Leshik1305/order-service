@@ -1,15 +1,12 @@
-import uuid
-
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, Response, HTTPException
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 
-from src.application.use_cases.post_order import PostOrderService
+
 from src.container import Container
-from src.controller.api import auth
-from src.entity import Notification, NotificationId, OwnerId
+
 
 from src.application.dtos.order import OrderCreateDTO, OrderDTO
+from src.infrastructure.http.http_clients import CreateOrderAPI
 
 router = APIRouter()
 
@@ -18,16 +15,7 @@ router = APIRouter()
 @inject
 async def create_order(
     order: OrderCreateDTO,
-    uc: PostOrderService = Depends(Provide[Container.infrastructure.create_order_api]),
+    uc: CreateOrderAPI = Depends(Provide[Container.application.create_order_in_db]),
 ):
-    status_code, result = await uc.execute(
-        user_id=item.user_id,
-        item_id=item.item_id,
-        quantity=item.quantity,
-        key=item.idempotency_key,
-    )
-
-    if status_code >= 400:
-        raise HTTPException(status_code=status_code, detail=result)
-
+    result = await uc.create(item_id=order.item_id, quantity=order.quantity)
     return result

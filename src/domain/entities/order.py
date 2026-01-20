@@ -7,16 +7,11 @@ from pydantic import BaseModel
 from src.domain.value_objects.order_status import OrderStatusEnum
 
 
-class OrderDTO(BaseModel):
+class OrderEntity(BaseModel):
     id: UUID
     item_id: UUID
     quantity: int
     amount: Decimal
-    status: OrderStatusEnum
+    status: OrderStatusEnum = OrderStatusEnum.NEW
     created_at: datetime
     update_at: datetime
-
-
-class OrderCreateDTO(BaseModel):
-    item_id: UUID
-    quantity: int

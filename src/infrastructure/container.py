@@ -1,8 +1,8 @@
 from dependency_injector import containers, providers
 
-from src.infrastructure.db import Database
-from src.infrastructure.http.http_clients import CatalogServiceAPI
-from src.infrastructure.uow import UnitOfWork
+from .db import Database
+from .http.http_clients import CatalogServiceAPI
+from .uow import UnitOfWork
 
 
 class InfrastructureContainer(containers.DeclarativeContainer):

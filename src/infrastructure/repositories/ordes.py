@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.application.dtos.order import OrderCreateDTO
 from src.application.exceptions import IdempotencyConflictError
 from src.domain.value_objects.order_status import OrderStatusEnum
-from src.infrastructure.db.models import OrderORM
+from ..db.models import OrderORM
 
 
 class Orders:

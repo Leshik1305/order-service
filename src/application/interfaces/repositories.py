@@ -1,7 +1,7 @@
 from typing import Protocol
 from uuid import UUID
 
-from src.application.dtos.order import OrderCreateDTO
+from ..dtos.order import OrderCreateDTO
 
 
 class Orders(Protocol):

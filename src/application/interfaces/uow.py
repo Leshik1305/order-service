@@ -1,6 +1,6 @@
 import typing
 
-from src.application.interfaces.repositories import Repository
+from .repositories import Repository
 
 
 class UnitOfWork(typing.Protocol):

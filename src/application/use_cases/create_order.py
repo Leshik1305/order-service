@@ -1,9 +1,7 @@
-from uuid import uuid4
+from ..dtos.order import OrderCreateDTO, OrderReadDTO
+from ..exceptions import IsAvailableQtyError, IdempotencyConflictError
 
-from src.application.dtos.order import OrderCreateDTO, OrderReadDTO
-from src.application.exceptions import IsAvailableQtyError, IdempotencyConflictError
-
-from src.application.interfaces.uow import UnitOfWork
+from ..interfaces.uow import UnitOfWork
 from src.infrastructure.http.http_clients import CatalogServiceAPI
 
 

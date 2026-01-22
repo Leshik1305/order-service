@@ -1,0 +1,33 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: order_service_db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: service
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      dockerfile: ./docker-build/app/Dockerfile
+      context: ./
+    container_name: order_service_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      # Важно: используем имя сервиса 'db'
+      DATABASE_URL: postgresql+asyncpg://user:password@db:5432/service
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:

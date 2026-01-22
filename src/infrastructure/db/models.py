@@ -1,11 +1,10 @@
 import enum
 
-from decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
 
-from sqlalchemy import Enum, Numeric, DateTime, func, UUID, Integer, CheckConstraint
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Enum, DateTime, func, UUID, Integer
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.infrastructure.db import Base
 

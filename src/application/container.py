@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
 
-from src.application.use_cases.create_order import CreateOrder
+from .use_cases.create_order import CreateOrder
 
 
 class ApplicationContainer(containers.DeclarativeContainer):

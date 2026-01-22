@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.domain.value_objects.order_status import OrderStatusEnum
+from ..value_objects.order_status import OrderStatusEnum
 
 
 class OrderEntity(BaseModel):

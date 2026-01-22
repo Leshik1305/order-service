@@ -25,6 +25,9 @@ class OrderORM(Base):
     )
     item_id: Mapped[UUID] = mapped_column(UUID, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    idempotency_key: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), unique=True, nullable=False
+    )
     status: Mapped[OrderStatusEnum] = mapped_column(
         Enum(OrderStatusEnum), default=OrderStatusEnum.NEW
     )

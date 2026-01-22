@@ -1,9 +1,10 @@
-from sqlalchemy import insert
+from uuid import UUID
+
+from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.application.dtos.order import OrderDTO
-from src.application.interfaces.repositories import OrdersProtocol
-from src.application.use_cases.create_order_in_db import OrderPersister
+from src.application.dtos.order import OrderCreateDTO
+from src.application.exceptions import IdempotencyConflictError
 from src.domain.value_objects.order_status import OrderStatusEnum
 from src.infrastructure.db.models import OrderORM
 
@@ -12,14 +13,25 @@ class Orders:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, order: OrderDTO):
-        await self.session.execute(
-            insert(OrderORM).values(
-                id=order.id,
-                item_id=order.item_id,
-                quantity=order.quantity,
-                status=OrderStatusEnum.NEW,
-                created_at=order.created_at,
-                update_at=order.update_at,
-            ),
+    async def create(self, order: OrderCreateDTO, idempotency_key):
+        new_order = OrderORM(
+            item_id=order.item_id,
+            quantity=order.quantity,
+            idempotency_key=idempotency_key,
+            status=OrderStatusEnum.NEW,
         )
+        self.session.add(new_order)
+
+        await self.session.flush()
+
+        await self.session.refresh(new_order)
+
+        return new_order
+
+    async def check_idempotency_key(self, idempotency_key: UUID) -> bool:
+        stmt = await self.session.execute(
+            select(OrderORM).where(OrderORM.idempotency_key == idempotency_key)
+        )
+        if stmt.scalar_one_or_none():
+            raise IdempotencyConflictError("Such an order already exists!")
+        return True

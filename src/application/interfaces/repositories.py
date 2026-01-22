@@ -1,11 +1,14 @@
 from typing import Protocol
+from uuid import UUID
 
-from src.application.dtos.order import OrderDTO
+from src.application.dtos.order import OrderCreateDTO
 
 
-class OrdersProtocol(Protocol):
-    async def create(self, order: OrderDTO): ...
+class Orders(Protocol):
+    async def check_idempotency_key(self, idempotency_key: UUID): ...
+
+    async def create(self, order: OrderCreateDTO, key: UUID): ...
 
 
 class Repository(Protocol):
-    orders: OrdersProtocol
+    orders: Orders

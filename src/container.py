@@ -17,4 +17,5 @@ class Container(containers.DeclarativeContainer):
     application = providers.Container(
         ApplicationContainer,
         uow=infrastructure.uow,
+        catalog_api=infrastructure.catalog_api,
     )

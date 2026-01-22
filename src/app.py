@@ -1,9 +1,10 @@
 import fastapi
 import uvicorn
-
+from fastapi import FastAPI
 
 from src.container import Container
 from src.presentation import api
+from src.presentation.api import router
 from src.settings import Settings
 
 
@@ -22,7 +23,8 @@ def create_app() -> fastapi.FastAPI:
 
 app = create_app()
 
-
+# app = FastAPI()
+# app.include_router(router)
 if __name__ == "__main__":
     uvicorn.run(
         "app:app",

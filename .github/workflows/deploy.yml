@@ -58,16 +58,16 @@ jobs:
     steps:
       - name: Send deploy request
         run: |
-          # 1. Преобразуем имя репозитория: меняем '/' на '_' (Leshik1305_order-service)
-          LMS_REPOSITORY_NAME=$(echo "${{ github.repository }}" | sed 's/\//_/g')
-          
-          # 2. Формируем тег образа (используем lowercase имя из шага build)
+          # 1. Заменяем / на _ И переводим в нижний регистр (Leshik1305/order-service -> leshik1305_order-service)
+          LMS_REPOSITORY_NAME="Leshik1305_order-service"
+
+          # 2. Формируем тег образа
           IMAGE_TAG="ghcr.io/${{ needs.build.outputs.repo }}:${{ github.sha }}"
 
           echo "🚀 Deploying image: $IMAGE_TAG"
           echo "🎯 Target repository in LMS: $LMS_REPOSITORY_NAME"
-          
-          # 3. Отправляем запрос. URL должен быть ВНУТРИ скобок $(), а данные в двойных кавычках.
+
+          # 3. Отправляем запрос
           HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X POST \
             -H "Content-Type: application/json" \
             -H "X-API-Key: ${{ secrets.LMS_API_KEY }}" \

@@ -58,6 +58,14 @@ jobs:
     steps:
       - name: Send deploy request
         run: |
+          LMS_REPOSITORY_NAME=$(echo "${{ github.repository }}" | sed 's/\//_/g')
+          
+          
+          IMAGE_TAG="ghcr.io/${{ needs.build.outputs.repo }}:${{ github.sha }}"
+
+          echo "Deploying image: $IMAGE_TAG"
+          echo "Target repository in LMS: $LMS_REPOSITORY_NAME"
+          
           HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X POST \
             -H "Content-Type: application/json" \
             -H "X-API-Key: ${{ secrets.LMS_API_KEY }}" \

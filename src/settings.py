@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_PORT: int = 8000
-    CALLBACK_URL: str
+    CALLBACK_URL: str = "http://localhost:8000/callback"
     POSTGRES_CONNECTION_STRING: str
     BASE_URL: Optional[str] = "http://localhost"
     API_KEY: Optional[str] = "default_key"

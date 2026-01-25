@@ -12,6 +12,10 @@ class Base(DeclarativeBase):
 
 class Database:
     def __init__(self, db_url: str) -> None:
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+        elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
+            db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
         self.engine = create_async_engine(db_url, echo=True)
         self.session_factory: sessionmaker[AsyncSession] = sessionmaker(  # type: ignore
             bind=typing.cast(Engine, self.engine),

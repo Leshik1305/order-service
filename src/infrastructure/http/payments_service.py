@@ -22,7 +22,7 @@ class PaymentsServiceAPI(PaymentsServiceAPIProtocol):
         cb_url = urllib.parse.urljoin(self._callback_url, "/orders/payment-callback")
         payload = {
             "order_id": str(payment.order_id),
-            "amount": str(payment.amount),
+            "amount": payment.amount,
             "callback_url": cb_url,
             "idempotency_key": str(payment.idempotency_key),
         }

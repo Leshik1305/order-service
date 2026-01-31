@@ -25,8 +25,11 @@ class CreateOrder:
     async def execute(self, order: OrderCreateDTO) -> OrderReadDTO:
 
         async with self._uow() as uow:
-
-            await uow.orders.check_idempotency_key(order.idempotency_key)
+            existing_order = await uow.orders.get_by_idempotency_key(
+                order.idempotency_key
+            )
+            if existing_order:
+                return OrderReadDTO.model_validate(existing_order)
 
             item = await self._catalog_service.check_available_qty(
                 item_id=order.item_id, quantity=order.quantity

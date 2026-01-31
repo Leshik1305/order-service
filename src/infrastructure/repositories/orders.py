@@ -52,11 +52,10 @@ class Orders(OrdersProtocol):
 
         return new_order
 
-    async def check_idempotency_key(self, idempotency_key: str):
+    async def get_by_idempotency_key(self, idempotency_key: str) -> Optional[OrderORM]:
         stmt = select(OrderORM).where(OrderORM.idempotency_key == idempotency_key)
         result = await self._session.execute(stmt)
-        if result.scalar_one_or_none():
-            raise IdempotencyConflictError("Such an order already exists!")
+        return result.scalar_one_or_none()
 
     async def update_status_with_outbox(
         self, order_id: UUID, status: OrderStatusEnum

@@ -49,4 +49,4 @@ class CreateOrder:
                     new_order_orm.id, OrderStatusEnum.CANCELLED
                 )
 
-            return OrderReadDTO.model_validate(new_order_orm)
+        return OrderReadDTO.model_validate(new_order_orm)

@@ -9,7 +9,7 @@ from pydantic import BaseModel
 class PaymentDTO(BaseModel):
     order_id: UUID
     amount: Decimal
-    idempotency_key: UUID
+    idempotency_key: str
 
 
 class PaymentCreateDTO(PaymentDTO):

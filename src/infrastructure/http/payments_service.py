@@ -42,7 +42,9 @@ class PaymentsServiceAPI(PaymentsServiceAPIProtocol):
             print(f"Response Body: {exc.response.text}")
             print(f"Payload sent: {payload}")
             print(f"---------------------------")
-            raise PaymentCreationError(f"Payment API returned error: {exc.response.text}")
+            raise PaymentCreationError(
+                f"Payment API returned error: {exc.response.text}"
+            )
 
         except Exception as exc:
             # Для прочих ошибок (таймаут, проблемы с сетью)

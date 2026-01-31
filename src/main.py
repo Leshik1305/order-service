@@ -31,7 +31,7 @@ async def lifespan(app: fastapi.FastAPI):
     try:
         yield
     finally:
-        logging.info("Shutting down services...")
+        logging.info("Shutting down services ...")
 
         outbox_worker.stop()
 

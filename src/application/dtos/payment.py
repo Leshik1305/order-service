@@ -25,8 +25,8 @@ class PaymentReadDTO(PaymentDTO):
 
 
 class PaymentCallbackDTO(BaseModel):
-    payment_id: UUID
-    order_id: UUID
+    payment_id: str
+    order_id: str
     status: str
     amount: Decimal
     error_message: Optional[str] = None

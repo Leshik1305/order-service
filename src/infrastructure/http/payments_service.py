@@ -22,7 +22,7 @@ class PaymentsServiceAPI(PaymentsServiceAPIProtocol):
         url = f"{base_url}/api/payments"
 
         cb_base = self._callback_url.rstrip("/")
-        cb_url = f"{cb_base}/api/orders/payment-callback"
+        cb_url = f"{cb_base}/orders/payment-callback"
         payload = {
             "order_id": str(payment.order_id),
             "amount": f"{payment.amount:.2f}",

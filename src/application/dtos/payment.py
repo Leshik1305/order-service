@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class PaymentDTO(BaseModel):
     order_id: UUID
-    amount: str
+    amount: Decimal
     idempotency_key: str
 
 

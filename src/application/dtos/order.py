@@ -23,7 +23,7 @@ class OrderCreateDTO(BaseModel):
     user_id: str
     item_id: UUID
     quantity: int
-    idempotency_key: str | None
+    idempotency_key: UUID | str
 
 
 class OrderReadDTO(BaseModel):

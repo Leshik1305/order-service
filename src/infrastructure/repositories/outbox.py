@@ -1,7 +1,6 @@
-from select import select
 from typing import Optional
 
-from sqlalchemy import insert, literal_column, update
+from sqlalchemy import insert, literal_column, update, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.dtos.outbox import OutboxCreateDTO, OutboxEventDTO

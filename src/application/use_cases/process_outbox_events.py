@@ -32,10 +32,11 @@ class ProcessOutboxEventsUseCase:
                     await asyncio.sleep(5)
                     continue
 
-
                 for event in events:
                     try:
-                        await self._kafka_producer.publish_event(topic=self._topic, event=event)
+                        await self._kafka_producer.publish_event(
+                            topic=self._topic, event=event
+                        )
                         async with self._uow() as uow:
                             await uow.outbox.mark_as_sent(event.id)
                             await uow.commit()
